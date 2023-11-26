@@ -1,0 +1,39 @@
+[flake8]
+# Useful docs:
+#     Flake8 Rules: https://www.flake8rules.com/
+#         (plugin) bugbear rules: https://github.com/PyCQA/flake8-bugbear#list-of-warnings
+#         (plugin) pep8-naming rules: https://github.com/PyCQA/pep8-naming#error-codes
+#         (plugin) flake8-docstrings rules: http://www.pydocstyle.org/en/stable/error_codes.html
+
+# Dependencies
+require-plugins =
+    flake8-bugbear,
+    flake8-docstrings
+    pep8-naming
+
+# What to lint
+exclude =
+  .ipynb_checkpoints
+  .git
+  __pycache__
+  .pytest_cache
+  .vscode
+
+# Rules
+docstring-convention = google
+hang-closing = false
+max-complexity = 10
+max-line-length = 120
+
+# Ignores
+ignore =
+    D107,
+    W503,
+    E203
+per-file-ignores =
+    __init__.py: D104
+    test_*: D100, F401
+
+# Output
+format = pylint
+statistics = true
