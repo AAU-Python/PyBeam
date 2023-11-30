@@ -45,29 +45,13 @@ def test_from_csv():
 
     elements = elements_from_csv(csv_path, nodes)
 
-    assert elements == [
-        BeamElement(
-            start_node=nodes[0],
-            end_node=nodes[1],
+    for i, element in enumerate(elements):
+        assert element == BeamElement(
+            start_node=nodes[i],
+            end_node=nodes[i + 1],
             modulus_of_elasticity=2.1e11,
             moment_of_inertia=8.33e-8,
             area=1e-4,
-            index=0,
-        ),
-        BeamElement(
-            start_node=nodes[1],
-            end_node=nodes[2],
-            modulus_of_elasticity=2.1e11,
-            moment_of_inertia=8.33e-8,
-            area=1e-4,
-            index=1,
-        ),
-        BeamElement(
-            start_node=nodes[2],
-            end_node=nodes[0],
-            modulus_of_elasticity=2.1e11,
-            moment_of_inertia=8.33e-8,
-            area=1e-4,
-            index=2,
-        ),
-    ]
+            index=i,
+            density=7850,
+        )

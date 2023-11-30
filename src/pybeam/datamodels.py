@@ -14,6 +14,8 @@ def _parse_bool_from_str(string: str) -> bool:
         >>> _parse_bool_from_str("true")
         True
     """
+    if isinstance(string, bool):
+        return string
     return string == "true"
 
 @attrs.define(frozen=True)
