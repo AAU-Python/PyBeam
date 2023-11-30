@@ -1,3 +1,4 @@
+"""Utility stuff that's generally useful."""
 import numpy as np
 
 

@@ -49,7 +49,7 @@ def nodes_from_csv(file_path: str) -> list[Node]:
         reader = csv.DictReader(file_buffer)
         for record in reader:
             if record["index"] in existing_indices:
-                _LOGGER.warning(f"Duplicate node index: {record['index']}")
+                _LOGGER.warning(f"Duplicate node index: {record['index']}")  # pylint: disable=inconsistent-quotes
             node = Node(**record)
             existing_indices.add(node.index)
             nodes.append(node)
@@ -94,7 +94,7 @@ def elements_from_csv(file_path: str, nodes: list[Node]):
         reader = csv.DictReader(file_buffer)
         for record in reader:
             if record["index"] in existing_indices:
-                _LOGGER.warning(f"Duplicate node index: {record['index']}")
+                _LOGGER.warning(f"Duplicate node index: {record['index']}")  # pylint: disable=inconsistent-quotes
             element = BeamElement(
                 index=record["index"],
                 start_node=node_map[int(record["start_node"])],
