@@ -53,6 +53,7 @@ def nodes_from_csv(file_path: str) -> list[Node]:
             node = Node(**record)
             existing_indices.add(node.index)
             nodes.append(node)
+    _LOGGER.info(f"Got {len(nodes)} nodes from {file_path}")
     return nodes
 
 
@@ -106,4 +107,5 @@ def elements_from_csv(file_path: str, nodes: list[Node]):
             )
             existing_indices.add(element.index)
             elements.append(element)
+    _LOGGER.info(f"Got {len(elements)} elements from {file_path}")
     return elements
