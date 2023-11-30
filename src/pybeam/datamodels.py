@@ -62,6 +62,7 @@ class BeamElement:
     modulus_of_elasticity: float = attrs.field(converter=float)
     moment_of_inertia: float = attrs.field(converter=float)
     area: float = attrs.field(converter=float)
+    density: float = attrs.field(converter=float, default=0)
     length: float = attrs.field(init=False)
     angle: float = attrs.field(init=False)
 
@@ -97,6 +98,7 @@ def elements_from_csv(file_path: str, nodes: list[Node]):
                 modulus_of_elasticity=record["modulus_of_elasticity"],
                 moment_of_inertia=record["moment_of_inertia"],
                 area=record["area"],
+                density=record.get("density", 0.0)
             )
             existing_indices.add(element.index)
             elements.append(element)

@@ -15,7 +15,7 @@ def test_length(x_0: float, y_0: float, x_1: float, y_1: float, expected: float)
         end_node=Node(x_1, y_1, 1),
         index=0,
         modulus_of_elasticity=2.1e11,
-        moment_of_intertia=8.33e-8,
+        moment_of_inertia=8.33e-8,
         area=1e-4,
     )
 
@@ -30,7 +30,7 @@ def test_angle(x_0: float, y_0: float, x_1: float, y_1: float, expected: float):
         end_node=Node(x_1, y_1, 1),
         index=0,
         modulus_of_elasticity=2.1e11,
-        moment_of_intertia=8.33e-8,
+        moment_of_inertia=8.33e-8,
         area=1e-4,
     )
 
