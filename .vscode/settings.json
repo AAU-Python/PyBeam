@@ -12,5 +12,6 @@
         "**/*.egg-info": true,
         ".coverage": true,
         ".pytest_cache": true,
-    }
+    },
+    "python.analysis.typeCheckingMode": "off"
 }

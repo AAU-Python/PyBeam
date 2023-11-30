@@ -20,7 +20,7 @@ def test_from_csv():
     nodes = nodes_from_csv(file_path)
 
     assert nodes == [
-        Node(0.0, 0.0, 0),
-        Node(1.0, 0.0, 1),
-        Node(0.0, 2.0, 2),
+        Node(0.0, 0.0, 0, fix_u=False, fix_v=False, fix_theta=True),
+        Node(1.0, 0.0, 1, fix_u=False, fix_v=False, fix_theta=False),
+        Node(0.0, 2.0, 2, fix_u=True, fix_v=True, fix_theta=True),
     ]

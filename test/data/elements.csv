@@ -1,0 +1,4 @@
+index,start_node,end_node,modulus_of_elasticity,moment_of_inertia,area
+0,0,1,2.1E11,8.33E-8,1E-4
+1,1,2,2.1E11,8.33E-8,1E-4
+2,2,0,2.1E11,8.33E-8,1E-4
