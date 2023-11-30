@@ -4,8 +4,10 @@ import logging
 
 import attrs
 import numpy as np
+import scipy.linalg as la
 
 _LOGGER = logging.getLogger(__name__)
+
 
 def _parse_bool_from_str(string: str) -> bool:
     """Parse a boolean from a string.
@@ -17,6 +19,7 @@ def _parse_bool_from_str(string: str) -> bool:
     if isinstance(string, bool):
         return string
     return string == "true"
+
 
 @attrs.define(frozen=True)
 class Node:
@@ -32,7 +35,6 @@ class Node:
     fix_v: bool = attrs.field(converter=_parse_bool_from_str, default=False)
     fix_theta: bool = attrs.field(converter=_parse_bool_from_str, default=False)
 
-
     @dofs.default
     def _set_dofs(self) -> tuple[int, int, int]:
         dofs = tuple(self.index * 3 + i for i in range(3))
@@ -47,7 +49,7 @@ def nodes_from_csv(file_path: str) -> list[Node]:
         reader = csv.DictReader(file_buffer)
         for record in reader:
             if record["index"] in existing_indices:
-                _LOGGER.warning(f"Duplicate node index: {record["index"]}")
+                _LOGGER.warning(f"Duplicate node index: {record['index']}")
             node = Node(**record)
             existing_indices.add(node.index)
             nodes.append(node)
@@ -72,7 +74,7 @@ class BeamElement:
     def _set_length(self) -> float:
         dx = self.end_node.x - self.start_node.x
         dy = self.end_node.y - self.start_node.y
-        return np.linalg.norm((dx, dy))
+        return la.norm((dx, dy))
 
     @angle.default
     def _set_angle(self) -> float:
@@ -92,7 +94,7 @@ def elements_from_csv(file_path: str, nodes: list[Node]):
         reader = csv.DictReader(file_buffer)
         for record in reader:
             if record["index"] in existing_indices:
-                _LOGGER.warning(f"Duplicate node index: {record["index"]}")
+                _LOGGER.warning(f"Duplicate node index: {record['index']}")
             element = BeamElement(
                 index=record["index"],
                 start_node=node_map[int(record["start_node"])],
@@ -100,7 +102,7 @@ def elements_from_csv(file_path: str, nodes: list[Node]):
                 modulus_of_elasticity=record["modulus_of_elasticity"],
                 moment_of_inertia=record["moment_of_inertia"],
                 area=record["area"],
-                density=record.get("density", 0.0)
+                density=record.get("density", 0.0),
             )
             existing_indices.add(element.index)
             elements.append(element)

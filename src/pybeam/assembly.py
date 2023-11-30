@@ -1,13 +1,18 @@
+"""Module for assembling system matrices."""
 import itertools
 
 import numpy as np
 
-from ._utilities import pprint_array
 from .datamodels import BeamElement, Node
 from .system_matrices import create_mass_matrix, create_rotation_matrix, create_stiffness_matrix
 
 
 def assemble_system_matrices(elements: list[BeamElement]):
+    """Assemble the global mass and stiffness matrices.
+
+    Returns:
+        tuple[np.ndarray, np.ndarray]: Stiffness matrix, mass matrix.
+    """
     n_dof = len(set(itertools.chain(*[(*element.start_node.dofs, *element.end_node.dofs) for element in elements])))
 
     global_stiffness_matrix = np.zeros((n_dof, n_dof), dtype=np.float64)

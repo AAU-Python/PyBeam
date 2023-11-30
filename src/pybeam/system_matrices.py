@@ -1,3 +1,4 @@
+"""Module for creating element matrices."""
 import logging
 
 import numpy as np

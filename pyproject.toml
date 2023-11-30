@@ -96,7 +96,23 @@ const-naming-style = "UPPER_CASE"
 function-naming-style = "snake_case"
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names = ["c", "i", "j", "k", "m", "var", "_"]
+good-names = [
+    "c",
+    "i",
+    "j",
+    "k",
+    "m",
+    "var",
+    "_",
+    "x",
+    "y",
+    "E",
+    "A",
+    "I",
+    "L",
+    "dx",
+    "dy",
+]
 
 # Naming style matching correct inline iteration names.
 inlinevar-naming-style = "snake_case"

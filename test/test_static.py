@@ -6,7 +6,6 @@ from pybeam.system_matrices import create_stiffness_matrix
 
 def test_cantilever_beam():
     """Assert that the correct transverse displacement for a cantilever beam is obtained."""
-
     element = BeamElement(
         start_node=Node(
             0.0,
