@@ -61,7 +61,7 @@ def newmark(
     velocities[:, 0] = initial_vel
 
     accelerations = np.zeros((n_dof, len(time)))
-    initial_acc = la.inv(mass).dot(loads[:, 0]) - damping.dot(initial_vel) - stiffness.dot(initial_disp)
+    initial_acc = la.inv(mass).dot(loads[:, 0] - damping.dot(initial_vel) - stiffness.dot(initial_disp))
     accelerations[:, 0] = initial_acc
 
     for i in range(len(time) - 1):
