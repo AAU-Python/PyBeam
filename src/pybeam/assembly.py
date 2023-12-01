@@ -1,10 +1,13 @@
 """Module for assembling system matrices."""
 import itertools
+import logging
 
 import numpy as np
 
 from .datamodels import BeamElement, Node
 from .system_matrices import create_mass_matrix, create_rotation_matrix, create_stiffness_matrix
+
+_LOGGER = logging.getLogger(__name__)
 
 
 def assemble_system_matrices(elements: list[BeamElement]):
@@ -36,6 +39,7 @@ def assemble_system_matrices(elements: list[BeamElement]):
     reduced_stiffness_matrix = apply_boundary_conditions(global_stiffness_matrix, fixed_dof)
     reduced_mass_matrix = apply_boundary_conditions(global_mass_matrix, fixed_dof)
 
+    _LOGGER.info(f"Generated stiffness and mass with {reduced_stiffness_matrix.shape[0]} DOF")
     return reduced_stiffness_matrix, reduced_mass_matrix
 
 
