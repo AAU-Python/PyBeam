@@ -80,7 +80,8 @@ class BeamElement:
     @angle.default
     def _set_angle(self) -> float:
         dx = self.end_node.x - self.start_node.x
-        angle = np.arccos(dx / self.length)
+        dy = self.end_node.y - self.start_node.y
+        angle = np.arctan2(dy, dx)
         return angle
 
 
