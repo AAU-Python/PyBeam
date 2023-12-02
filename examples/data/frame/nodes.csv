@@ -1,0 +1,14 @@
+index,x,y,fix_u,fix_v,fix_theta
+00,0.00,0.00,true,true,true
+01,0.00,0.25,false,false,false
+02,0.00,0.50,false,false,false
+03,0.00,0.75,false,false,false
+04,0.00,1.00,false,false,false
+05,0.25,1.00,false,false,false
+06,0.50,1.00,false,false,false
+07,0.75,1.00,false,false,false
+08,1.00,1.00,false,false,false
+09,1.00,0.75,false,false,false
+10,1.00,0.50,false,false,false
+11,1.00,0.25,false,false,false
+12,1.00,0.00,true,true,true
