@@ -84,7 +84,7 @@ def reindex_dof(elements: list[BeamElement]) -> list[BeamElement]:
                 else:
                     dof_node[i] -= shift
             dof_node = tuple(dof_node)
-            _LOGGER.info(f"Reindexing DOF of node {node.index} from {node.dofs} to {dof_node}")
+            _LOGGER.debug(f"Reindexing DOF of node {node.index} from {node.dofs} to {dof_node}")
             node.dofs = dof_node
             handled_nodes.add(node.index)
     return elements

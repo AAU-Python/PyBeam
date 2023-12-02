@@ -15,3 +15,5 @@ dependencies:
   - numba         # Optimization of Python code
   - pytest        # For running automated tests of the code
   - pytest-cov    # For generating test coverage reports
+  - black         # Code formatter
+  - isort         # Code formatter

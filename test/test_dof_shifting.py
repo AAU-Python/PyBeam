@@ -33,5 +33,3 @@ def test_dof_shift(elements: list[BeamElement]):
         7,
         8,
     ]
-
-
