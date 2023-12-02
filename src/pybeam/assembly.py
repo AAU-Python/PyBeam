@@ -62,3 +62,29 @@ def _get_fixed_dofs(elements: list[BeamElement]):
                 fixed_dof.update(maybe_fixed_dofs)
 
     return list(fixed_dof)
+
+
+def reindex_dof(elements: list[BeamElement]) -> list[BeamElement]:
+    """Shift DOF numbering to take into account boundary conditions.
+
+    For example, for a single beam element with a fixed support in the first node, the original numbering would be
+    ``(0, 1, 2, 3, 4, 5)``. After reindexing, DOF ``(3, 4, 5)`` will be renumbered to ``(None, None, None, 0, 1, 2)``.
+    """
+    shift = 0
+    handled_nodes: set(int) = set()
+    for element in elements:
+        for node in (element.start_node, element.end_node):
+            if node.index in handled_nodes:
+                continue
+            dof_node = list(node.dofs)
+            for i, is_fixed in enumerate((node.fix_u, node.fix_v, node.fix_theta)):
+                if is_fixed:
+                    shift += 1
+                    dof_node[i] = None
+                else:
+                    dof_node[i] -= shift
+            dof_node = tuple(dof_node)
+            _LOGGER.info(f"Reindexing DOF of node {node.index} from {node.dofs} to {dof_node}")
+            node.dofs = dof_node
+            handled_nodes.add(node.index)
+    return elements

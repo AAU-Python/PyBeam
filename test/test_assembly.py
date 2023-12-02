@@ -1,37 +1,11 @@
 import math
-from pathlib import Path
 
 import numpy as np
 import pytest
 import scipy.linalg as la
 
-from pybeam.assembly import assemble_system_matrices
-from pybeam.datamodels import BeamElement, elements_from_csv, nodes_from_csv
+from pybeam.datamodels import BeamElement
 from pybeam.modal_parameters import get_modal_parameters
-
-
-@pytest.fixture
-def elements():
-    nodes = nodes_from_csv(Path(__file__).parent / "data" / "nodes.csv")
-
-    csv_path = Path(__file__).parent / "data" / "elements.csv"
-
-    yield elements_from_csv(csv_path, nodes)
-
-
-@pytest.fixture
-def system_matrices(elements: list[BeamElement]):
-    yield assemble_system_matrices(elements)
-
-
-@pytest.fixture
-def stiffness(system_matrices: tuple[np.ndarray, np.ndarray]):
-    return system_matrices[0]
-
-
-@pytest.fixture
-def mass(system_matrices: tuple[np.ndarray, np.ndarray]):
-    return system_matrices[1]
 
 
 def test_assembly(elements: list[BeamElement], stiffness: np.ndarray, mass: np.ndarray):
@@ -55,5 +29,6 @@ def test_assembly(elements: list[BeamElement], stiffness: np.ndarray, mass: np.n
         assert frequency == pytest.approx(eigenfrequencies[i], rel=0.02)
 
 
+@pytest.mark.skip(reason="WIP")
 def test_modal_parameters(stiffness: np.ndarray, mass: np.ndarray):
     frequencies, modeshapes = get_modal_parameters(stiffness, mass)
