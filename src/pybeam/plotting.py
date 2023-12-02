@@ -1,3 +1,4 @@
+import logging
 from copy import deepcopy
 
 import matplotlib.pyplot as plt
@@ -7,6 +8,8 @@ from .assembly import reindex_dof
 from .datamodels import BeamElement, Node
 
 __all__ = ["plot_structure"]
+
+_LOGGER = logging.getLogger(__name__)
 
 
 def set_style():
@@ -90,6 +93,28 @@ def _plot_element(element: BeamElement, labels: bool = True, color="black", line
         )
 
 
+def plot_deformations(elements: list[BeamElement], deformations: np.ndarray, scale=1):
+    """Plot modeshape number ``mode``.
+
+    Arguments:
+        elements (list[BeamElement]): List of beam elements making up the mesh.
+        deformations (np.ndarray): Deformation vector.
+        scale (int): An arbitrary scaling factor for the modal displacements. Defaults to 1.
+    """
+    plot_structure(elements, node_labels=False, element_labels=False)
+    elements_copy = list(map(deepcopy, elements))
+
+    for element in elements_copy:
+        for node in (element.start_node, element.end_node):
+            if not node.fix_u:
+                new_x = node.x + deformations[node.dofs[0]] * scale
+                node.x = new_x
+            if not node.fix_v:
+                new_y = node.y + deformations[node.dofs[1]] * scale
+                node.y = new_y
+    plot_structure(elements_copy, linecolor="red", node_labels=True, element_labels=True)
+
+
 def plot_modeshape(elements: list[BeamElement], modal_matrix: np.ndarray, mode: int = 0, scale=1):
     """Plot modeshape number ``mode``.
 
@@ -105,10 +130,16 @@ def plot_modeshape(elements: list[BeamElement], modal_matrix: np.ndarray, mode: 
     elements_copy = list(map(deepcopy, elements))
 
     for element in elements_copy:
+        _LOGGER.debug(f"Processing modeshape for element {element.index}")
         for node in (element.start_node, element.end_node):
+            _LOGGER.debug(f"Processing modeshape for node {node.index}")
             if not node.fix_u:
-                node.x += modeshape[node.dofs[0]] * scale
+                new_x = node.x + modeshape[node.dofs[0]] * scale
+                _LOGGER.debug(f"N{node.index}.x (DOF {node.dofs[0]}): ({node.x} -> {new_x})")
+                node.x = new_x
             if not node.fix_v:
-                node.y += modeshape[node.dofs[1]] * scale
+                new_y = node.y + modeshape[node.dofs[1]] * scale
+                _LOGGER.debug(f"N{node.index}.y (DOF {node.dofs[1]}): ({node.y} -> {new_y})")
+                node.y = new_y
 
     plot_structure(elements_copy, linecolor="red", node_labels=True, element_labels=True)
