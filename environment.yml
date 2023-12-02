@@ -4,9 +4,14 @@ channels:
   - conda-forge
 
 dependencies:
-  - python=3.12
-  - numpy
-  - polars
-  - attrs
-  - ipykernel
-  - matplotlib
+  - python=3.11   # The Python interpreter
+  - colorama      # Colored terminal output
+  - numpy         # Math library
+  - attrs         # Dataclass library
+  - ipykernel     # For running Jupyter in VS Code
+  - matplotlib    # Plotting library
+  - scipy         # Scientific computing. Used for linear algebra.
+  - ipympl        # Jupyter plotting backend for matplotlib
+  - numba         # Optimization of Python code
+  - pytest        # For running automated tests of the code
+  - pytest-cov    # For generating test coverage reports

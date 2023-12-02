@@ -21,7 +21,7 @@ def _parse_bool_from_str(string: str) -> bool:
     return string == "true"
 
 
-@attrs.define(frozen=True)
+@attrs.define
 class Node:
     """A node in the finite element model."""
 

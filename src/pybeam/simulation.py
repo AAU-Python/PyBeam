@@ -1,12 +1,13 @@
 import logging
 
+import numba
 import numpy as np
 import scipy.linalg as la
 
 _LOGGER = logging.getLogger(__name__)
 
 
-def newmark(
+def simulate(
     *,
     stiffness: np.ndarray,
     mass: np.ndarray,
@@ -17,9 +18,8 @@ def newmark(
     damping: np.ndarray | None = None,
     beta: float = 1 / 4,
     gamma: float = 1 / 2,
-) -> np.ndarray:
+):
     n_dof: int = stiffness.shape[0]
-
     if damping is None:
         _LOGGER.info("System is undamped.")
         damping = np.zeros((n_dof, n_dof))
@@ -44,8 +44,41 @@ def newmark(
     if not stiffness.shape == mass.shape:
         raise ValueError(f"Incorrect matrix dimensions, K ({stiffness.shape}), M ({mass.shape})")
 
-    # Helper parameters
+    _LOGGER.info(f"Simulating {stiffness.shape[0]} DOF system.")
+
     dt = time[1] - time[0]
+    _LOGGER.info(f"Simulating from time {time[0]} to {time[-1]} and time step size {dt} ({len(time)} samples).")
+
+    return newmark(
+        stiffness=stiffness,
+        mass=mass,
+        damping=damping,
+        time=time,
+        initial_disp=initial_disp,
+        initial_vel=initial_vel,
+        loads=loads,
+        beta=beta,
+        gamma=gamma,
+    )
+
+
+@numba.jit(nopython=True, cache=True)
+def newmark(
+    *,
+    stiffness: np.ndarray,
+    mass: np.ndarray,
+    time: np.ndarray,
+    initial_disp: np.ndarray,
+    initial_vel: np.ndarray,
+    loads: np.ndarray,
+    damping: np.ndarray,
+    beta: float = 1 / 4,
+    gamma: float = 1 / 2,
+) -> np.ndarray:
+    # Helper parameters
+    n_dof: int = stiffness.shape[0]
+    dt = time[1] - time[0]
+
     a_1 = 1 / (beta * dt**2)
     a_2 = 1 / (beta * dt)
     a_3 = 1 / (2 * beta)
@@ -61,7 +94,7 @@ def newmark(
     velocities[:, 0] = initial_vel
 
     accelerations = np.zeros((n_dof, len(time)))
-    initial_acc = la.inv(mass).dot(loads[:, 0] - damping.dot(initial_vel) - stiffness.dot(initial_disp))
+    initial_acc = np.linalg.inv(mass).dot(loads[:, 0] - damping.dot(initial_vel) - stiffness.dot(initial_disp))
     accelerations[:, 0] = initial_acc
 
     for i in range(len(time) - 1):
@@ -72,7 +105,7 @@ def newmark(
             + dt * (gamma * a_3 - 1) * accelerations[:, i]
         )
 
-        displacements[:, i + 1] = la.inv(eff_stiff).dot(loads[:, i + 1] + a_eff + v_eff)
+        displacements[:, i + 1] = np.linalg.inv(eff_stiff).dot(loads[:, i + 1] + a_eff + v_eff)
         velocities[:, i + 1] = (
             gamma * a_2 * (displacements[:, i + 1] - displacements[:, i])
             - (gamma * a_4 - 1) * velocities[:, i]
