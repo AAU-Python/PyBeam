@@ -1,6 +1,7 @@
 """Module for creating element matrices."""
 import logging
 
+import numba
 import numpy as np
 
 from .datamodels import BeamElement
@@ -11,8 +12,12 @@ _LOGGER = logging.getLogger(__name__)
 def create_rotation_matrix(element: BeamElement) -> np.ndarray:
     """Create a rotation matrix for a ``BeamElement``."""
     # See https://media.cheggcdn.com/media/b6b/b6b3e21c-ed57-4a0c-aca6-b078c0245813/phpbpLJEN.png
-    cos = np.cos(element.angle)
-    sin = np.sin(element.angle)
+    return _create_rotation_matrix(float(element.angle))
+
+
+def _create_rotation_matrix(angle: float) -> np.ndarray:
+    cos = np.cos(angle)
+    sin = np.sin(angle)
 
     matrix = np.array(
         [
@@ -29,7 +34,7 @@ def create_rotation_matrix(element: BeamElement) -> np.ndarray:
     return matrix
 
 
-def create_stiffness_matrix(element: BeamElement):
+def create_stiffness_matrix(element: BeamElement) -> np.ndarray:
     """Create a stiffness matrix for a ``BeamElement``."""
     # See https://media.cheggcdn.com/media/b6b/b6b3e21c-ed57-4a0c-aca6-b078c0245813/phpbpLJEN.png
     E = element.modulus_of_elasticity  # noqa E741
@@ -37,6 +42,10 @@ def create_stiffness_matrix(element: BeamElement):
     L = element.length  # noqa=E741
     I = element.moment_of_inertia  # noqa=E741
 
+    return _create_stiffness_matrix(A, E, I, L)
+
+
+def _create_stiffness_matrix(A: float, E: float, I: float, L: float) -> np.ndarray:
     k_1 = E * A / L
     k_2 = 12 * E * I / L**3
     k_3 = 6 * E * I / L**2
@@ -66,6 +75,10 @@ def create_mass_matrix(element: BeamElement) -> np.ndarray:
     A = element.area  # noqa=E741
     L = element.length  # noqa=E741
 
+    return _create_mass_matrix(A, L, rho)
+
+
+def _create_mass_matrix(A: float, L: float, rho: float) -> np.ndarray:
     matrix = (
         (rho * A * L)
         / 420
@@ -77,7 +90,8 @@ def create_mass_matrix(element: BeamElement) -> np.ndarray:
                 [70, 0, 0, 140, 0, 0],
                 [0, 54, 13 * L, 0, 156, -22 * L],
                 [0, -13 * L, -3 * L**2, 0, -22 * L, 4 * L**2],
-            ]
+            ],
+            dtype=np.float64,
         )
     )
 
