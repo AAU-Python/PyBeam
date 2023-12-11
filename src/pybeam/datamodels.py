@@ -141,7 +141,7 @@ class SnCurveDnv(SnCurve):
                 m_1=3.0,
                 log_a_bar_1=12.301,
                 log_a_bar_2=15.835,
-                limit_at_10e7=58.48,
+                limit_at_1e7=58.48,
                 k=0.15,
                 t=25,  # t = t_ref if t < t_ref
                 t_ref=25,

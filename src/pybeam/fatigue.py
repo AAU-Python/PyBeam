@@ -1,7 +1,7 @@
 import logging
 from typing import Literal
 
-import numba
+
 import numpy as np
 
 from .datamodels import BeamElement, Node
