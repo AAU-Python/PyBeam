@@ -1,6 +1,7 @@
 import logging
 from typing import Literal
 
+import numba
 import numpy as np
 
 from .datamodels import BeamElement, Node
@@ -54,7 +55,9 @@ def displacements_to_stresses(displacements: np.ndarray, element: BeamElement, z
     return tuple(stresses)
 
 
-def get_stress_history(displacements: np.ndarray, element: BeamElement, z: float, node: Literal["start", "end"]):
+def get_stress_history(
+    displacements: np.ndarray, element: BeamElement, z: float, node: Literal["start", "end"]
+) -> np.ndarray:
     if node == "start":
         index = 0
     elif node == "end":

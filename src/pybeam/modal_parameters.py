@@ -7,7 +7,7 @@ import scipy.linalg as la
 _LOGGER = logging.getLogger(__name__)
 
 
-def get_modal_parameters(stiffness: np.ndarray, mass: np.ndarray):
+def get_modal_parameters(stiffness: np.ndarray, mass: np.ndarray, normalize: bool = False):
     """Get undamped eigenfrequencies and modeshapes."""
     # TODO: add damping ratios
     eigenvalues, eigenvectors = la.eig(stiffness, mass)
@@ -16,8 +16,10 @@ def get_modal_parameters(stiffness: np.ndarray, mass: np.ndarray):
 
     eigenfrequencies = np.sqrt(eigenvalues[sorting_mask])
     eigenvectors = eigenvectors[:, sorting_mask]
-
-    modeshapes = _normalize_eigenvectors(eigenvectors, mass)
+    if normalize:
+        modeshapes = _normalize_eigenvectors(eigenvectors, mass)
+    else:
+        modeshapes = eigenvectors
 
     # Mass, normalize
 

@@ -143,3 +143,27 @@ def plot_modeshape(elements: list[BeamElement], modal_matrix: np.ndarray, mode: 
                 node.y = new_y
 
     plot_structure(elements_copy, linecolor="red", node_labels=True, element_labels=True)
+
+
+def plot_fft(series: np.ndarray, time: np.ndarray, yscale: str = "log", xscale: str = "log"):
+    """Plot the frequency content in Hz of ``series``."""
+    fft_ = np.fft.fft(series)
+
+    dt = time[1] - time[0]
+
+    n_2 = int(np.floor(len(fft_) / 2))
+    amps = np.abs(fft_[0:n_2]) / n_2
+    freqs = np.fft.fftfreq(len(time), dt)[0:n_2]
+
+    plt.figure()
+    ax = plt.gca()
+
+    # Adjust the look of the plot
+    ax.set_xlabel("Frequency [Hz]")
+    ax.set_ylabel("Amplitude")
+    # ax.set_xlim(0, freqs[-1])
+    ax.set_xscale(xscale)
+    ax.set_yscale(yscale)
+
+    ax.plot(freqs, amps, color="white")
+    plt.show()
