@@ -156,21 +156,21 @@ class SnCurveDnv(SnCurve):
     """Intercept of SN curve in region 2 with ``log(N)`` axis."""
     m_1: float
     """Inverse negative slope in region 1."""
+    limit_at_1e7: float
+    """Fatigue limit at 1E7 cycles."""
     t_ref: float
     """Reference thickness.
     
     Equal to 25 mm for bolts and welded connections other than tubular joints. For tubular joints, the reference
     thickness is 32 mm.
     """
-    t: float
+    t: float = 0
     """Thickness through which a crack would most likely grow.
 
     ``t = t_ref`` is used if ``t < t_ref.``
     """
-    k: float
+    k: float = 0
     """Thickness exponent."""
-    limit_at_1e7: float
-    """Fatigue limit at 1E7 cycles."""
     m_2: float = 5.0
     """Inverse negative slope in region 2."""
 
