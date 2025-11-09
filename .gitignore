@@ -1,3 +1,5 @@
 **__pycache__
 .coverage
-**.egg-info
+**.egg-info# pixi environments
+.pixi/*
+!.pixi/config.toml

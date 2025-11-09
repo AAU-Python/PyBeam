@@ -1,0 +1,27 @@
+[workspace]
+authors = ["Martin Jepsen <majp@ramboll.com>"]
+channels = ["conda-forge"]
+name = "PyBeam"
+platforms = ["win-64"]
+version = "0.1.0"
+
+
+[dependencies]
+python = "=3.13"
+colorama = "*"
+numpy = "*"
+attrs = "*"
+ipykernel = "*"
+matplotlib = "*"
+scipy = "*"
+ipympl = "*"
+numba = "*"
+rainflow = "*"
+jupyterlab = "*"
+pyqt = "*"
+
+[pypi-dependencies]
+pybeam = { path = ".", editable = true }
+
+[tasks]
+jupyter = { cmd = "jupyter lab", cwd = "examples" }

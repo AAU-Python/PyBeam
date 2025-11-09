@@ -1,17 +1,15 @@
 [project]
 name = "pybeam"
-dynamic = ["version"]
+version = "0.1.0"
 
 [build-system]
-requires = ["setuptools", "setuptools-scm[toml]", "cython"]
+requires = ["setuptools", "cython"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
 # Having this prevents confusion when having git submod
 package-dir = { "" = "./src" }
 
-[tool.setuptools_scm]
-# Intentionally empty, see https://github.com/pypa/setuptools_scm#setuptools_scm
 
 [tool.pytest.ini_options]
 # Usage: pytest .
